@@ -2,3 +2,4 @@
 src/stories/assets
 # components images
 src/assets
+functions/**/*
