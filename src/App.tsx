@@ -1,29 +1,35 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-import logo from "./logo.svg";
-import "./App.css";
+import { Box, CssBaseline, Paper, Typography } from "@mui/material";
 
 function App() {
   return (
-    <Provider store={store}>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Router>
+      <Provider store={store}>
+        <CssBaseline />
+        <Box
+          height="100vh"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <Paper
+            elevation={3}
+            sx={{ padding: "1rem", backgroundColor: "secondary.light" }}
           >
-            Learn React
-          </a>
-        </header>
-      </div>
-    </Provider>
+            <Typography color="primary.dark" variant="h1">
+              Starter App
+            </Typography>
+          </Paper>
+        </Box>
+        <Routes>
+          <Route path="/new-component" element={<div>New component</div>} />
+        </Routes>
+      </Provider>
+    </Router>
   );
 }
 
