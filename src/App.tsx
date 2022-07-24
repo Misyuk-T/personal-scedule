@@ -1,8 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { store } from "./redux/store";
+import store from "./redux/store";
 import { Provider } from "react-redux";
 import { CssBaseline } from "@mui/material";
 import { Header } from "./components";
+
+// import { GoogleAuthProvider } from "firebase/auth";
+
+// const provider = new GoogleAuthProvider();
 
 const App = () => {
   return (

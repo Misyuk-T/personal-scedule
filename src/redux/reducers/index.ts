@@ -1,9 +1,13 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import scheduleReducer from "./schedule";
+import scheduleSlice from "./scheduleSlice";
+import userSlice from "./userSlice";
 
 const rootReducer = combineReducers({
-  schedule: scheduleReducer,
+  schedule: scheduleSlice,
+  user: userSlice,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 export default rootReducer;
