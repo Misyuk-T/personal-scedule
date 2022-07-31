@@ -3,19 +3,17 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import { CssBaseline } from "@mui/material";
 import { Header } from "./components";
-
-// import { GoogleAuthProvider } from "firebase/auth";
-
-// const provider = new GoogleAuthProvider();
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
     <Router>
       <Provider store={store}>
         <CssBaseline />
+        <Header />
         <Routes>
-          <Route path="/" element={<Header />} />
-          <Route path="/new-component" element={<div>New component</div>} />
+          <Route path="/" element={<p>HOME PAGE</p>} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Provider>
     </Router>

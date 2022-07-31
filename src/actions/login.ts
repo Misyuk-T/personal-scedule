@@ -7,9 +7,19 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  setDoc,
+  getDocs,
+  limit,
+  query,
+  where,
+  collection,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { AppThunk } from "../redux/store";
-import { login, logout } from "redux/reducers/userSlice";
+import { logout, login } from "redux/reducers/userSlice";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDUC7p7k8LbJy1oHAoJqJIz9CqtNCup2ow",
@@ -29,47 +39,72 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth();
 const db = getFirestore();
 
-export const authObserve = (): AppThunk => (dispatch) => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const { displayName, email, photoURL, uid } = user;
+export const openLoginPopup = async () => {
+  provider.addScope("profile");
+  provider.addScope("email");
+
+  await signInWithPopup(auth, provider).then();
+};
+
+export const loginUser =
+  (googleUserData: any): AppThunk =>
+  async (dispatch) => {
+    try {
+      const { displayName, email, photoURL, uid } = googleUserData;
       const userData = {
         name: displayName,
         email: email,
         photo: photoURL,
-        id: uid,
+        ownerId: uid,
       };
 
-      return new Promise(() => {
-        // const db = firestore();
+      const usersRef = collection(db, "users");
+      const userRef = doc(usersRef);
+      const getUserWithEmail = query(
+        usersRef,
+        where("email", "==", email),
+        limit(1)
+      );
+      const usersSnapShot = await getDocs(getUserWithEmail);
+      const existingUser = usersSnapShot.docs[0];
 
-        const usersDoc = doc(db, "users", uid);
-        updateDoc(usersDoc, userData).then((data) => {
-          //  dispatch(login(user));
-          console.log(data, "user");
+      if (usersSnapShot.empty) {
+        await setDoc(userRef, {
+          ...userData,
+          id: userRef.id,
+        }).then(() => {
+          dispatch(login({ ...userData, id: userRef.id }));
         });
-      })
-        .then(() => {
-          dispatch(login(userData));
-        })
-        .catch((err) => {
-          console.error(err);
+      } else {
+        const userDoc = doc(db, "users", existingUser.id);
+
+        await updateDoc(userDoc, userData).then(() => {
+          dispatch(login({ ...userData }));
         });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+export const logoutUser = async () => {
+  await signOut(auth);
+};
+
+// export const updateUser =
+//   (user: User): AppThunk =>
+//   (dispatch) => {
+//     updateUserInformation(auth).then(() => {
+//       dispatch(logout());
+//     });
+//   };
+
+export const observeAuth = (): AppThunk => (dispatch) => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dispatch(loginUser(user));
     } else {
       dispatch(logout());
     }
-  });
-};
-
-export const loginUser = async () => {
-  provider.addScope("profile");
-  provider.addScope("email");
-
-  await signInWithPopup(auth, provider);
-};
-
-export const logoutUser = (): AppThunk => (dispatch) => {
-  signOut(auth).then(() => {
-    dispatch(logout());
   });
 };

@@ -2,11 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../types/user";
 
 type UserSlice = {
-  user: User | null;
+  user: User;
+  isAuthorized: boolean;
 };
 
 const initialState: UserSlice = {
-  user: null,
+  user: {} as User,
+  isAuthorized: false,
 };
 
 export const userSlice = createSlice({
@@ -15,13 +17,18 @@ export const userSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.user = action.payload;
+      state.isAuthorized = true;
     },
     logout: (state) => {
-      state.user = null;
+      state.user = {} as User;
+      state.isAuthorized = false;
+    },
+    updateUserInformation: (state, action) => {
+      state.user = action.payload;
     },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, updateUserInformation } = userSlice.actions;
 
 export default userSlice.reducer;
