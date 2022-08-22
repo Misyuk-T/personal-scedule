@@ -15,7 +15,9 @@
     "@types/node": "^16.11.43",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
+    "classnames": "^2.3.1",
     "firebase": "^9.9.1",
+    "formik": "^2.2.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^8.0.2",
@@ -32,12 +34,6 @@
     "lint:eslint:fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix",
     "prettify": "prettier --write **/*.{ts,tsx,js,jsx,json}"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -51,13 +47,14 @@
     ]
   },
   "devDependencies": {
+    "typescript": "^4.7.4",
     "eslint": "^8.20.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.7.1"
   }
 }
