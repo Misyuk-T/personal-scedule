@@ -1,17 +1,7 @@
-const fs = require("fs");
-const path = require("path");
-
-const prettierOptions = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, ".prettierrc"), "utf8")
-);
-
 module.exports = {
   root: true,
-  env: {
-    browser: true,
-    jest: true,
-  },
-  plugins: ["prettier"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   extends: ["airbnb-typescript", "react-app", "prettier"],
   parserOptions: {
     project: "./tsconfig.json",
@@ -22,7 +12,22 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "no-console": ["warn", { allow: ["warn", "error"] }],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    "prettier/prettier": ["error", prettierOptions],
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        selector: "default",
+        format: [
+          "camelCase",
+          "strictCamelCase",
+          "PascalCase",
+          "StrictPascalCase",
+          "snake_case",
+          "UPPER_CASE",
+        ],
+        leadingUnderscore: "allow",
+        trailingUnderscore: "allow",
+      },
+    ],
   },
 };
