@@ -15,11 +15,10 @@ import {
   query,
   where,
   collection,
-  updateDoc,
   doc,
 } from "firebase/firestore";
 import { AppThunk } from "../redux/store";
-import { logout, login } from "redux/reducers/userSlice";
+import { logout, login, setAuthObserve } from "redux/reducers/userSlice";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDUC7p7k8LbJy1oHAoJqJIz9CqtNCup2ow",
@@ -49,6 +48,8 @@ export const openLoginPopup = async () => {
 export const loginUser =
   (googleUserData: any): AppThunk =>
   async (dispatch) => {
+    dispatch(setAuthObserve(true));
+
     try {
       const { displayName, email, photoURL, uid } = googleUserData;
       const userData = {
@@ -66,7 +67,6 @@ export const loginUser =
         limit(1)
       );
       const usersSnapShot = await getDocs(getUserWithEmail);
-      const existingUser = usersSnapShot.docs[0];
 
       if (usersSnapShot.empty) {
         await setDoc(userRef, {
@@ -76,11 +76,9 @@ export const loginUser =
           dispatch(login({ ...userData, id: userRef.id }));
         });
       } else {
-        const userDoc = doc(db, "users", existingUser.id);
+        const existingUser = usersSnapShot.docs[0];
 
-        await updateDoc(userDoc, userData).then(() => {
-          dispatch(login({ ...userData }));
-        });
+        dispatch(login(existingUser.data()));
       }
     } catch (err) {
       console.error(err);
@@ -90,14 +88,6 @@ export const loginUser =
 export const logoutUser = async () => {
   await signOut(auth);
 };
-
-// export const updateUser =
-//   (user: User): AppThunk =>
-//   (dispatch) => {
-//     updateUserInformation(auth).then(() => {
-//       dispatch(logout());
-//     });
-//   };
 
 export const observeAuth = (): AppThunk => (dispatch) => {
   onAuthStateChanged(auth, (user) => {
