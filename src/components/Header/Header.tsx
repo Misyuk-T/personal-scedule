@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useTypedDispatch, useTypedSelector } from "../../redux/store";
-import { logoutUser, observeAuth, openLoginPopup } from "../../actions/login";
-
+import { Link, NavLink } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -19,6 +16,10 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 
+import { useTypedDispatch, useTypedSelector } from "redux/store";
+import { logoutUser, observeAuth, openLoginPopup } from "actions/login";
+import logo from "assets/logo.png";
+
 const pages = ["Products", "Pricing", "Blog"];
 
 const Header = () => {
@@ -29,7 +30,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(observeAuth());
-  }, []);
+  }, [dispatch]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -51,24 +52,18 @@ const Header = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
+          <Link to="/">
+            <Box
+              component="img"
+              sx={{
+                height: 75,
+                width: 120,
+              }}
+              mr={2}
+              alt="logo"
+              src={logo}
+            />
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
