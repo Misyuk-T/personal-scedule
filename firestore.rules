@@ -1,4 +1,13 @@
 rules_version = '2';
+
+service firebase.storage {
+    match /b/{bucket}/o {
+        match /{allPath=**} {
+            allow read, write: if request.auth != null;
+        }
+    }
+}
+
 service cloud.firestore {
     match /databases/{database}/documents {
     function isAuthorized() {
