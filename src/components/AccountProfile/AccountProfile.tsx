@@ -1,14 +1,22 @@
 import { useState } from "react";
+import { useFormik, Form, FormikProvider, FormikValues } from "formik";
 import {
-  Box,
+  Stack,
   Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
   Grid,
-  TextField,
 } from "@mui/material";
+
+import { TextField } from "../TextField";
+import { Alert } from "../Alert";
+
+import { useTypedDispatch } from "redux/store";
+import { updateUser } from "actions/user";
+import { UPDATE_DATA } from "helpers/constants";
+import { accountProfileSchema } from "helpers/validationShemes";
 import { User } from "types/user";
 
 interface AccountProfileDetailsProps {
@@ -18,62 +26,83 @@ interface AccountProfileDetailsProps {
 export const AccountProfileDetails = ({
   userInformation,
 }: AccountProfileDetailsProps) => {
-  const [values, setValues] = useState({
-    name: userInformation.name,
-    email: userInformation.email,
-  });
+  const dispatch = useTypedDispatch();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const handleChange = (event: any) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
+  const toggleAlert = () => {
+    setShowAlert((prevState) => !prevState);
   };
 
+  const handleSubmit = (values: FormikValues) => {
+    dispatch(updateUser(userInformation.id, values));
+    toggleAlert();
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      name: userInformation.name,
+      email: userInformation.email,
+      website: userInformation.website,
+      statement: userInformation.statement,
+    },
+    enableReinitialize: true,
+    validationSchema: accountProfileSchema,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    },
+  });
+
+  const { isValid, dirty } = formik;
+
   return (
-    <form autoComplete="off" noValidate>
-      <Card>
-        <CardHeader subheader="The information can be edited" title="Profile" />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Name"
-                name="lastName"
-                onChange={handleChange}
-                required
-                value={values.name}
-                variant="outlined"
-              />
+    <FormikProvider value={formik}>
+      <Form>
+        <Card>
+          <CardHeader
+            subheader="The information can be edited"
+            title="Profile"
+          />
+
+          <Divider />
+
+          <CardContent>
+            <Grid container spacing={3}>
+              <Grid item md={6} xs={12}>
+                <TextField name="name" label="Name" required />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField name="statement" label="Your Statement" />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField name="website" label="Personal website" />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField name="email" label="Email Address" disabled />
+              </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Email Address"
-                name="email"
-                value={values.email}
-                variant="outlined"
-                disabled
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            p: 2,
-          }}
-        >
-          <Button color="primary" variant="contained">
-            Save details
-          </Button>
-        </Box>
-      </Card>
-    </form>
+          </CardContent>
+
+          <Divider />
+
+          <Stack justifyContent="flex-end">
+            <Button
+              disabled={!isValid || !dirty}
+              color="primary"
+              variant="contained"
+              type="submit"
+            >
+              Save details
+            </Button>
+          </Stack>
+        </Card>
+      </Form>
+
+      <Alert
+        onToggle={toggleAlert}
+        showAlert={showAlert}
+        message={UPDATE_DATA}
+      />
+    </FormikProvider>
   );
 };
 

@@ -1,6 +1,6 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography, Stack } from "@mui/material";
 import { AccountProfile, AccountInformation } from "components";
-import { useTypedSelector } from "../redux/store";
+import { useTypedSelector } from "redux/store";
 
 const Account = () => {
   const { user, isAuthorized } = useTypedSelector((state) => state.user);
@@ -10,11 +10,10 @@ const Account = () => {
   }
 
   return (
-    <Box
+    <Stack
+      direction="column"
       sx={{
-        display: "flex",
         flex: "1 1 auto",
-        flexDirection: "column",
         width: "100%",
       }}
     >
@@ -39,7 +38,7 @@ const Account = () => {
           </Grid>
         </Container>
       </Box>
-    </Box>
+    </Stack>
   );
 };
 
