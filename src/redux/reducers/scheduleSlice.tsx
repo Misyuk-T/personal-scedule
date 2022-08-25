@@ -1,43 +1,37 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
+import { Schedule } from "types/schedule";
 
-const initialState = {
-  sleepInfo: null,
-  weightInfo: null,
-  alcoholInfo: null,
-  sportInfo: null,
-  moodInfo: null,
+type ScheduleSlice = {
+  schedules: Schedule[];
+};
+
+const initialState: ScheduleSlice = {
+  schedules: [],
 };
 
 const scheduleSlice = createSlice({
   name: "schedule",
   initialState,
   reducers: {
-    addSleepInfo(state, action) {
-      state.sleepInfo = action.payload;
+    addSchedules(state, action) {
+      state.schedules = [action.payload];
     },
-    addWeightInfo(state, action) {
-      state.weightInfo = action.payload;
+    updateSchedules(state, action) {
+      const filteredState = current(state).schedules.filter(
+        (item) => item.id !== action.payload.id
+      );
+      state.schedules = [...filteredState, action.payload];
     },
-    addAlcoholInfo(state, action) {
-      state.alcoholInfo = action.payload;
-    },
-    addSportInfo(state, action) {
-      state.sportInfo = action.payload;
-    },
-    addMoodInfo(state, action) {
-      state.moodInfo = action.payload;
+    removeSchedule(state, action) {
+      state.schedules = current(state).schedules.filter(
+        (item) => item.id !== action.payload
+      );
     },
   },
 });
 
 const { actions, reducer } = scheduleSlice;
 
-export const {
-  addSleepInfo,
-  addWeightInfo,
-  addAlcoholInfo,
-  addSportInfo,
-  addMoodInfo,
-} = actions;
+export const { addSchedules, updateSchedules, removeSchedule } = actions;
 
 export default reducer;
