@@ -3,10 +3,12 @@ import { Schedule } from "types/schedule";
 
 type ScheduleSlice = {
   schedules: Schedule[];
+  isLoading: boolean;
 };
 
 const initialState: ScheduleSlice = {
   schedules: [],
+  isLoading: false,
 };
 
 const scheduleSlice = createSlice({
@@ -32,11 +34,15 @@ const scheduleSlice = createSlice({
         (item) => item.id !== action.payload
       );
     },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
 const { actions, reducer } = scheduleSlice;
 
-export const { addSchedules, updateSchedules, removeSchedule } = actions;
+export const { addSchedules, updateSchedules, removeSchedule, setLoading } =
+  actions;
 
 export default reducer;

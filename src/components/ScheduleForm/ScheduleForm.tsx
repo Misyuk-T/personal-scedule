@@ -33,7 +33,9 @@ const ScheduleForm = ({
     : ({} as Schedule);
   const { name, description, color } = editedSchedule;
 
-  const [backgroundColor, setBackgroundColor] = useState<string>(color);
+  const [backgroundColor, setBackgroundColor] = useState<string>(
+    color || DEFAULT_COLOR
+  );
 
   const handleChangeColor = (value: ColorObject) => {
     const background = value.css.backgroundColor;
@@ -57,6 +59,7 @@ const ScheduleForm = ({
       description: description || "",
       color: color,
     },
+    validateOnChange: false,
     validationSchema: scheduleSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -97,7 +100,6 @@ const ScheduleForm = ({
             </Typography>
             <ColorPicker
               value={backgroundColor}
-              defaultValue={DEFAULT_COLOR}
               onChange={handleChangeColor}
               disableAlpha
               hideTextfield

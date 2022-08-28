@@ -1,5 +1,5 @@
 import { AppThunk } from "../redux/store";
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { doc, getFirestore, updateDoc, onSnapshot } from "firebase/firestore";
 import { updateUserInformation } from "../redux/reducers/userSlice";
 import {
   getDownloadURL,
@@ -16,6 +16,14 @@ export const updateUser =
   async (dispatch) => {
     await updateDoc(doc(db, "users", userId), user).then(() => {
       dispatch(updateUserInformation(user));
+    });
+  };
+
+export const observeUser =
+  (userId: string): AppThunk =>
+  async (dispatch) => {
+    onSnapshot(doc(db, "users", userId), (snapshot) => {
+      dispatch(updateUser(snapshot.data()?.id, snapshot.data()));
     });
   };
 

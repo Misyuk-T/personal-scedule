@@ -10,8 +10,9 @@ import {
   ListItemText,
   Icon,
   Button,
-  Stack,
   Card,
+  CircularProgress,
+  Backdrop,
 } from "@mui/material";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,7 +26,7 @@ import { deleteSchedule } from "actions/schedule";
 const ScheduleList = () => {
   const dispatch = useTypedDispatch();
   const { user } = useTypedSelector((state) => state.user);
-  const { schedules } = useTypedSelector((state) => state.schedule);
+  const { schedules, isLoading } = useTypedSelector((state) => state.schedule);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
@@ -44,7 +45,7 @@ const ScheduleList = () => {
   };
 
   const handleDelete = (id: ScheduleId) => () => {
-    toggleConfirmationModal("");
+    setShowConfirmation(false);
     dispatch(deleteSchedule(user.id, id));
   };
 
@@ -67,7 +68,8 @@ const ScheduleList = () => {
       <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
         Schedules
       </Typography>
-      <List dense={false}>
+
+      <List>
         {schedules.map((item) => {
           return (
             <ListItem
@@ -115,15 +117,14 @@ const ScheduleList = () => {
       </List>
 
       {showAddForm && (
-        <Stack direction="row">
-          <Card
-            sx={{
-              padding: 3,
-            }}
-          >
-            <ScheduleForm onClose={toggleForm} />
-          </Card>
-        </Stack>
+        <Card
+          sx={{
+            padding: 3,
+            width: "100%",
+          }}
+        >
+          <ScheduleForm onClose={toggleForm} />
+        </Card>
       )}
       <Button onClick={toggleForm}>{btnText}</Button>
 
@@ -133,6 +134,9 @@ const ScheduleList = () => {
         onConfirm={handleDelete(fieldId)}
         text="delete this schedule"
       />
+      <Backdrop open={isLoading} sx={{ zIndex: 100 }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Grid>
   );
 };

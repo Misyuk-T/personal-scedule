@@ -10,6 +10,9 @@ interface AccountProfileDetailsProps {
   required?: boolean;
   label?: string;
   disabled?: boolean;
+  autoFocus?: boolean;
+  fullWidth?: boolean;
+  size?: "medium" | "small";
 }
 
 const TextField = ({
@@ -20,6 +23,9 @@ const TextField = ({
   required,
   label,
   disabled,
+  autoFocus,
+  size,
+  fullWidth,
 }: AccountProfileDetailsProps) => {
   const { errors, getFieldProps } = useFormikContext();
   const fieldErrors: FieldErrors = errors;
@@ -38,6 +44,10 @@ const TextField = ({
         {...getFieldProps(name)}
         variant="outlined"
         disabled={disabled}
+        autoFocus={autoFocus}
+        fullWidth={fullWidth}
+        size={size}
+        multiline
       />
     </>
   );
@@ -49,8 +59,11 @@ TextField.defaultProps = {
   type: "text",
   placeholder: "Enter your information",
   label: "",
+  size: "medium",
   required: false,
   disabled: false,
+  autoFocus: false,
+  fullWidth: false,
 };
 
 export default TextField;

@@ -18,6 +18,7 @@ import {
   addSchedules,
   removeSchedule,
   updateSchedules,
+  setLoading,
 } from "redux/reducers/scheduleSlice";
 import { AppThunk } from "redux/store";
 import { Schedule, ScheduleId } from "types/schedule";
@@ -30,12 +31,18 @@ export const addSchedule =
     const scheduleRef = doc(collection(db, "schedules"));
     const scheduleId = scheduleRef.id;
 
+    dispatch(setLoading(true));
+
     await setDoc(scheduleRef, { ...schedule, id: scheduleId }).then(() => {
       updateDoc(doc(db, "users", userId), {
         schedules: arrayUnion(scheduleId),
-      }).then(() => {
-        dispatch(updateUserSchedules(scheduleId));
-      });
+      })
+        .then(() => {
+          dispatch(updateUserSchedules(scheduleId));
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+        });
     });
   };
 
@@ -44,21 +51,33 @@ export const deleteSchedule =
   async (dispatch) => {
     const scheduleRef = doc(db, "schedules", scheduleId);
 
+    dispatch(setLoading(true));
+
     await deleteDoc(scheduleRef).then(() => {
       updateDoc(doc(db, "users", userId), {
         schedules: arrayRemove(scheduleId),
-      }).then(() => {
-        dispatch(removeSchedule(scheduleId));
-      });
+      })
+        .then(() => {
+          dispatch(removeSchedule(scheduleId));
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+        });
     });
   };
 
 export const editSchedule =
   (scheduleId: ScheduleId, schedule: Schedule): AppThunk =>
   async (dispatch) => {
-    updateDoc(doc(db, "schedules", scheduleId), { ...schedule }).then(() => {
-      dispatch(updateSchedules(schedule));
-    });
+    dispatch(setLoading(true));
+
+    updateDoc(doc(db, "schedules", scheduleId), { ...schedule })
+      .then(() => {
+        dispatch(updateSchedules(schedule));
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
 
 export const observeSchedules =
