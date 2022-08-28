@@ -45,7 +45,7 @@ export const openLoginPopup = async () => {
   await signInWithPopup(auth, provider).then();
 };
 
-export const loginUser =
+const loginUser =
   (googleUserData: any): AppThunk =>
   async (dispatch) => {
     dispatch(setAuthObserve(true));
@@ -57,6 +57,7 @@ export const loginUser =
         email: email,
         photo: photoURL,
         ownerId: uid,
+        schedules: [],
       };
 
       const usersRef = collection(db, "users");

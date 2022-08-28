@@ -17,7 +17,7 @@ import { useTypedDispatch, useTypedSelector } from "redux/store";
 import { logoutUser, observeAuth, openLoginPopup } from "actions/login";
 import logo from "assets/logo.png";
 
-const pages = ["Observe data", "Create schedule"];
+const pages = ["schedule", "calendar"];
 
 const Header = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -56,6 +56,8 @@ const Header = () => {
             {pages.map((page) => (
               <Button
                 key={page}
+                component={Link}
+                to={page}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}

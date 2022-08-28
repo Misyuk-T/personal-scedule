@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { User } from "../../types/user";
 
 type UserSlice = {
@@ -31,6 +31,16 @@ export const userSlice = createSlice({
     updateUserInformation: (state, action) => {
       state.user = { ...state.user, ...action.payload };
     },
+    updateUserSchedules: (state, action) => {
+      const schedules = state.user.schedules || [];
+
+      state.user.schedules = [...schedules, action.payload];
+    },
+    removeUserSchedule: (state, action) => {
+      state.user.schedules = current(state).user.schedules.filter(
+        (item) => item !== action.payload
+      );
+    },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
@@ -46,6 +56,7 @@ export const {
   updateUserInformation,
   setLoading,
   setAuthObserve,
+  updateUserSchedules,
 } = userSlice.actions;
 
 export default userSlice.reducer;

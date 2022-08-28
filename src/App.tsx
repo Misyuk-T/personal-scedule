@@ -5,31 +5,37 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Container } from "@mui/material";
 
 import { Header, PrivateRoute, PageLoader } from "./components";
 import Profile from "./pages/Profile";
 import store from "./redux/store";
+import Schedules from "./pages/Schedules";
+import Calendar from "./pages/Calendar";
 
 const App = () => {
   return (
-    <Router>
-      <Provider store={store}>
+    <Provider store={store}>
+      <Router>
         <CssBaseline />
         <PageLoader />
         <Header />
 
-        <Routes>
-          <Route path="/" element={<p>HOME PAGE</p>} />
+        <Container maxWidth="xl">
+          <Routes>
+            <Route path="/" element={<p>HOME PAGE</p>} />
 
-          <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />} />
-          </Route>
+            <Route element={<PrivateRoute />}>
+              <Route path="/schedule" element={<Schedules />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/calendar" element={<Calendar />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Provider>
-    </Router>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Container>
+      </Router>
+    </Provider>
   );
 };
 

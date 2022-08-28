@@ -14,13 +14,18 @@ const scheduleSlice = createSlice({
   initialState,
   reducers: {
     addSchedules(state, action) {
-      state.schedules = [action.payload];
-    },
-    updateSchedules(state, action) {
       const filteredState = current(state).schedules.filter(
         (item) => item.id !== action.payload.id
       );
       state.schedules = [...filteredState, action.payload];
+    },
+    updateSchedules(state, action) {
+      state.schedules = current(state).schedules.map((item) => {
+        if (item.id === action.payload.id) {
+          return action.payload;
+        }
+        return item;
+      });
     },
     removeSchedule(state, action) {
       state.schedules = current(state).schedules.filter(

@@ -9,12 +9,18 @@ import {
   query,
   where,
   documentId,
+  deleteDoc,
+  arrayRemove,
 } from "firebase/firestore";
 
 import { updateUserSchedules } from "redux/reducers/userSlice";
-import { removeSchedule, updateSchedules } from "redux/reducers/scheduleSlice";
+import {
+  addSchedules,
+  removeSchedule,
+  updateSchedules,
+} from "redux/reducers/scheduleSlice";
 import { AppThunk } from "redux/store";
-import { ScheduleId } from "types/schedule";
+import { Schedule, ScheduleId } from "types/schedule";
 
 const db = getFirestore();
 
@@ -33,6 +39,28 @@ export const addSchedule =
     });
   };
 
+export const deleteSchedule =
+  (userId: string, scheduleId: ScheduleId): AppThunk =>
+  async (dispatch) => {
+    const scheduleRef = doc(db, "schedules", scheduleId);
+
+    await deleteDoc(scheduleRef).then(() => {
+      updateDoc(doc(db, "users", userId), {
+        schedules: arrayRemove(scheduleId),
+      }).then(() => {
+        dispatch(removeSchedule(scheduleId));
+      });
+    });
+  };
+
+export const editSchedule =
+  (scheduleId: ScheduleId, schedule: Schedule): AppThunk =>
+  async (dispatch) => {
+    updateDoc(doc(db, "schedules", scheduleId), { ...schedule }).then(() => {
+      dispatch(updateSchedules(schedule));
+    });
+  };
+
 export const observeSchedules =
   (schedules: ScheduleId[]): AppThunk =>
   async (dispatch) => {
@@ -44,7 +72,7 @@ export const observeSchedules =
     onSnapshot(q, (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-          dispatch(updateSchedules(change.doc.data()));
+          dispatch(addSchedules(change.doc.data()));
         }
         if (change.type === "modified") {
           dispatch(updateSchedules(change.doc.data()));
