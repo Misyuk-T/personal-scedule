@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { useFormik, Form, FormikProvider, FormikValues } from "formik";
 import { ColorPicker } from "material-ui-color";
-import { Button, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Stack,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormLabel,
+} from "@mui/material";
 import _groupBy from "lodash.groupby";
 
 import { TextField } from "components";
@@ -31,7 +38,13 @@ const ScheduleForm = ({
   const editedSchedule = scheduleId
     ? schedulesById[scheduleId][0]
     : ({} as Schedule);
-  const { name, description, color } = editedSchedule;
+  const { name, description, color, type } = editedSchedule;
+  const initialValues = {
+    name: name || "",
+    description: description || "",
+    color: color,
+    type: type || "range",
+  };
 
   const [backgroundColor, setBackgroundColor] = useState<string>(
     color || DEFAULT_COLOR
@@ -54,11 +67,7 @@ const ScheduleForm = ({
   };
 
   const formik = useFormik({
-    initialValues: {
-      name: name || "",
-      description: description || "",
-      color: color,
-    },
+    initialValues,
     validateOnChange: false,
     validationSchema: scheduleSchema,
     enableReinitialize: true,
@@ -67,13 +76,13 @@ const ScheduleForm = ({
     },
   });
 
-  const { isValid, dirty } = formik;
+  const { isValid, dirty, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
       <Form>
-        <Stack>
-          <Stack direction="column" width="100%" spacing={2} mr={10}>
+        <Stack direction="row" width="100%" alignItems="center">
+          <Stack direction="column" spacing={2} mr={10}>
             <TextField
               name="name"
               label="Schedule Name"
@@ -89,29 +98,49 @@ const ScheduleForm = ({
           </Stack>
 
           <Stack
-            direction="row"
+            direction="column"
             alignItems="center"
             justifyContent="space-between"
             mt={1}
           >
-            <Typography>
-              Color:{" "}
-              <Typography color={backgroundColor}>{backgroundColor}</Typography>
-            </Typography>
-            <ColorPicker
-              value={backgroundColor}
-              onChange={handleChangeColor}
-              disableAlpha
-              hideTextfield
-            />
-          </Stack>
+            <Stack direction="column" alignItems="center">
+              <FormLabel>Choose Color:</FormLabel>
 
+              <ColorPicker
+                value={backgroundColor}
+                onChange={handleChangeColor}
+                disableAlpha
+                hideTextfield
+              />
+            </Stack>
+
+            <FormLabel>Type of schedule:</FormLabel>
+            <RadioGroup {...getFieldProps("type")} row>
+              <FormControlLabel
+                value="boolean"
+                control={<Radio />}
+                label="boolean"
+              />
+              <FormControlLabel
+                value="range"
+                control={<Radio />}
+                label="range"
+              />
+            </RadioGroup>
+          </Stack>
+        </Stack>
+
+        <Stack direction="row" spacing={2}>
           <Button
             disabled={!isValid && !dirty}
             type="submit"
             variant="contained"
           >
-            Save Changes
+            Save
+          </Button>
+
+          <Button onClick={onClose} color="error" variant="contained">
+            Close Form
           </Button>
         </Stack>
       </Form>

@@ -33,8 +33,6 @@ const ScheduleList = () => {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [fieldId, setFieldId] = useState<ScheduleId>("");
 
-  const btnText = showAddForm ? "Close form" : "Add new schedule";
-
   const toggleForm = () => {
     setShowAddForm((prevState) => !prevState);
   };
@@ -65,7 +63,7 @@ const ScheduleList = () => {
 
   return (
     <Grid item xs={12} md={6}>
-      <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+      <Typography sx={{ mt: 4 }} variant="h6" component="div">
         Schedules
       </Typography>
 
@@ -116,7 +114,7 @@ const ScheduleList = () => {
         })}
       </List>
 
-      {showAddForm && (
+      {showAddForm ? (
         <Card
           sx={{
             padding: 3,
@@ -125,8 +123,9 @@ const ScheduleList = () => {
         >
           <ScheduleForm onClose={toggleForm} />
         </Card>
+      ) : (
+        <Button onClick={toggleForm}>Add new schedule</Button>
       )}
-      <Button onClick={toggleForm}>{btnText}</Button>
 
       <ConfirmationModal
         open={showConfirmation}

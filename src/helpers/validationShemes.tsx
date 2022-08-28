@@ -18,4 +18,5 @@ export const scheduleSchema = Yup.object().shape({
     .required("Required"),
   description: Yup.string().max(100, "Too Long!"),
   color: Yup.string().matches(REG_EXP_HEX, "HEX is not valid"),
+  type: Yup.string().required("Required"),
 });

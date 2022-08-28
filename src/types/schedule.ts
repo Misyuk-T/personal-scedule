@@ -32,4 +32,5 @@ export interface Schedule extends OwnerId {
   description: string;
   color: string;
   data: ScheduleData[];
+  type: "boolean" | "range";
 }
