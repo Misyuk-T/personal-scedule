@@ -69,7 +69,6 @@ const ScheduleForm = ({
 
   const formik = useFormik({
     initialValues,
-    validateOnChange: false,
     validationSchema: scheduleSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -77,7 +76,7 @@ const ScheduleForm = ({
     },
   });
 
-  const { isValid, dirty, getFieldProps } = formik;
+  const { isValid, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -132,11 +131,7 @@ const ScheduleForm = ({
 
           <Grid item xs={4}>
             <Stack direction="row" spacing={2}>
-              <Button
-                disabled={!isValid || !dirty}
-                type="submit"
-                variant="contained"
-              >
+              <Button disabled={!isValid} type="submit" variant="contained">
                 Save
               </Button>
 

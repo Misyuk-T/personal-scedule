@@ -65,12 +65,14 @@ const Calendar = () => {
         </Scheduler>
       </Paper>
 
-      <ModalAddForm
-        schedules={schedules}
-        open={isOpenModal}
-        onClose={handleToggleModal}
-        date={date || ""}
-      />
+      {isOpenModal && (
+        <ModalAddForm
+          schedules={schedules}
+          open={isOpenModal}
+          onClose={handleToggleModal}
+          date={date || ""}
+        />
+      )}
 
       <Backdrop open={isLoading} sx={{ zIndex: 100 }}>
         <CircularProgress color="inherit" />
