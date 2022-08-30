@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import _isEmpty from "lodash.isempty";
 import { useTypedSelector } from "redux/store";
 import { addScheduleData } from "actions/schedule";
 import { Schedule, ScheduleFields } from "types/schedule";
@@ -73,47 +74,58 @@ const ModalAddForm = ({
 
             <Divider />
 
-            <CardContent>
-              <Stack direction="column">
-                {schedules.map((item) => {
-                  const isBooleanType = item.type === "boolean";
+            {_isEmpty(schedules) ? (
+              <CardContent>
+                <Typography variant="h6" component="h6" color="error">
+                  You have no active schedules. Please create it before input
+                  data
+                </Typography>
+              </CardContent>
+            ) : (
+              <>
+                <CardContent>
+                  <Stack direction="column">
+                    {schedules.map((item) => {
+                      const isBooleanType = item.type === "boolean";
 
-                  return (
-                    <Stack key={item.id}>
-                      <Typography variant="h6" component="h6">
-                        {item.name}
-                      </Typography>
+                      return (
+                        <Stack key={item.id}>
+                          <Typography variant="h6" component="h6">
+                            {item.name}
+                          </Typography>
 
-                      {isBooleanType ? (
-                        <Stack direction="row" alignItems="center">
-                          Select checkbox:{" "}
-                          <Checkbox {...getFieldProps(item.id)} />
+                          {isBooleanType ? (
+                            <Stack direction="row" alignItems="center">
+                              Select checkbox:{" "}
+                              <Checkbox {...getFieldProps(item.id)} />
+                            </Stack>
+                          ) : (
+                            <Stack>
+                              Select amount of range:{" "}
+                              <Slider
+                                step={1}
+                                marks
+                                min={1}
+                                max={10}
+                                {...getFieldProps(item.id)}
+                              />
+                            </Stack>
+                          )}
                         </Stack>
-                      ) : (
-                        <Stack>
-                          Select amount of range:{" "}
-                          <Slider
-                            step={1}
-                            marks
-                            min={1}
-                            max={10}
-                            {...getFieldProps(item.id)}
-                          />
-                        </Stack>
-                      )}
-                    </Stack>
-                  );
-                })}
-              </Stack>
-            </CardContent>
+                      );
+                    })}
+                  </Stack>
+                </CardContent>
 
-            <Divider />
+                <Divider />
 
-            <Stack justifyContent="flex-end">
-              <Button color="primary" variant="contained" type="submit">
-                Save details
-              </Button>
-            </Stack>
+                <Stack justifyContent="flex-end">
+                  <Button color="primary" variant="contained" type="submit">
+                    Save details
+                  </Button>
+                </Stack>
+              </>
+            )}
           </Card>
         </Form>
       </FormikProvider>
