@@ -11,8 +11,10 @@ import {
   documentId,
   deleteDoc,
   arrayRemove,
+  getDocs,
 } from "firebase/firestore";
 
+import { AppThunk } from "redux/store";
 import { updateUserSchedules } from "redux/reducers/userSlice";
 import {
   addSchedules,
@@ -20,8 +22,7 @@ import {
   updateSchedules,
   setLoading,
 } from "redux/reducers/scheduleSlice";
-import { AppThunk } from "redux/store";
-import { Schedule, ScheduleId } from "types/schedule";
+import { Schedule, ScheduleData, ScheduleId } from "types/schedule";
 
 const db = getFirestore();
 
@@ -79,6 +80,29 @@ export const editSchedule =
         dispatch(setLoading(false));
       });
   };
+
+export const addScheduleData = async (
+  schedulesId: ScheduleId[],
+  data: Record<ScheduleId, ScheduleData>
+) => {
+  const q = query(
+    collection(db, "schedules"),
+    where(documentId(), "in", schedulesId)
+  );
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach((snapshot) => {
+    const existingFirebaseData = snapshot.data().data || [];
+    const freshDataItem = data[snapshot.id];
+    const filteredData = existingFirebaseData.filter(
+      (item: ScheduleData) => item.startDate !== freshDataItem.startDate
+    );
+
+    updateDoc(snapshot.ref, {
+      data: [...filteredData, freshDataItem],
+    });
+  });
+};
 
 export const observeSchedules =
   (schedules: ScheduleId[]): AppThunk =>

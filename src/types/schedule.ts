@@ -1,9 +1,6 @@
-import firebase from "firebase/compat";
-import { OwnerId } from "./user";
-
-import Timestamp = firebase.firestore.Timestamp;
 import { CSSProperties } from "react";
 import { Raw } from "material-ui-color";
+import { OwnerId } from "./user";
 
 export interface ColorObject {
   css: CSSProperties;
@@ -17,11 +14,15 @@ export interface ColorObject {
   hsl: [number, number, number];
 }
 
+export interface ScheduleFields {
+  [key: string]: boolean | number;
+}
+
 export interface ScheduleData {
-  label: string;
-  date: string;
+  scheduleId: string;
+  startDate: number;
+  endDate: number;
   value: boolean | number;
-  updateAt: Timestamp;
 }
 
 export type ScheduleId = string;

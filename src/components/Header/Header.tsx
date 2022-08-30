@@ -15,6 +15,7 @@ import {
 
 import { useTypedDispatch, useTypedSelector } from "redux/store";
 import { logoutUser, observeAuth, openLoginPopup } from "actions/login";
+import { observeSchedules } from "actions/schedule";
 import logo from "assets/logo.png";
 
 const pages = ["schedule", "calendar"];
@@ -24,10 +25,6 @@ const Header = () => {
   const { user, isAuthorized } = useTypedSelector((state) => state.user);
   const dispatch = useTypedDispatch();
 
-  useEffect(() => {
-    dispatch(observeAuth());
-  }, [dispatch]);
-
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -35,6 +32,16 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    dispatch(observeAuth());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user.schedules) {
+      dispatch(observeSchedules(user.schedules));
+    }
+  }, [dispatch, user.schedules]);
 
   return (
     <AppBar position="static">

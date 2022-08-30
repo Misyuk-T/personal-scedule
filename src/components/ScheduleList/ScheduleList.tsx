@@ -11,22 +11,24 @@ import {
   Icon,
   Button,
   Card,
-  CircularProgress,
-  Backdrop,
+  Box,
 } from "@mui/material";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { ConfirmationModal, ScheduleForm } from "components";
-import { ScheduleId } from "types/schedule";
+import { Schedule, ScheduleId } from "types/schedule";
 import { useTypedDispatch, useTypedSelector } from "redux/store";
 import { deleteSchedule } from "actions/schedule";
 
-const ScheduleList = () => {
+interface ScheduleListProps {
+  schedules: Schedule[];
+}
+
+const ScheduleList = ({ schedules }: ScheduleListProps) => {
   const dispatch = useTypedDispatch();
   const { user } = useTypedSelector((state) => state.user);
-  const { schedules, isLoading } = useTypedSelector((state) => state.schedule);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
@@ -69,6 +71,8 @@ const ScheduleList = () => {
 
       <List>
         {schedules.map((item) => {
+          const isShowEditForm = item.id === fieldId && isEdit;
+
           return (
             <ListItem
               key={item.id}
@@ -97,12 +101,14 @@ const ScheduleList = () => {
                 </Avatar>
               </ListItemAvatar>
 
-              {item.id === fieldId && isEdit ? (
-                <ScheduleForm
-                  onClose={handleCloseForm}
-                  scheduleId={fieldId}
-                  isEditForm
-                />
+              {isShowEditForm ? (
+                <Box width="100%">
+                  <ScheduleForm
+                    onClose={handleCloseForm}
+                    scheduleId={fieldId}
+                    isEditForm
+                  />
+                </Box>
               ) : (
                 <ListItemText
                   primary={item.name}
@@ -133,9 +139,6 @@ const ScheduleList = () => {
         onConfirm={handleDelete(fieldId)}
         text="delete this schedule"
       />
-      <Backdrop open={isLoading} sx={{ zIndex: 100 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </Grid>
   );
 };

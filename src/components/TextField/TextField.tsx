@@ -12,6 +12,7 @@ interface AccountProfileDetailsProps {
   disabled?: boolean;
   autoFocus?: boolean;
   fullWidth?: boolean;
+  multiline?: boolean;
   size?: "medium" | "small";
 }
 
@@ -26,6 +27,7 @@ const TextField = ({
   autoFocus,
   size,
   fullWidth,
+  multiline,
 }: AccountProfileDetailsProps) => {
   const { errors, getFieldProps } = useFormikContext();
   const fieldErrors: FieldErrors = errors;
@@ -47,7 +49,7 @@ const TextField = ({
         autoFocus={autoFocus}
         fullWidth={fullWidth}
         size={size}
-        multiline
+        multiline={multiline}
       />
     </>
   );
@@ -61,6 +63,7 @@ TextField.defaultProps = {
   label: "",
   size: "medium",
   required: false,
+  multiline: false,
   disabled: false,
   autoFocus: false,
   fullWidth: false,

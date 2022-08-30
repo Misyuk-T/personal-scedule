@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Radio,
   FormLabel,
+  Grid,
 } from "@mui/material";
 import _groupBy from "lodash.groupby";
 
@@ -81,28 +82,26 @@ const ScheduleForm = ({
   return (
     <FormikProvider value={formik}>
       <Form>
-        <Stack direction="row" width="100%" alignItems="center">
-          <Stack direction="column" spacing={2} mr={10}>
-            <TextField
-              name="name"
-              label="Schedule Name"
-              size="small"
-              autoFocus
-            />
-            <TextField
-              name="description"
-              label="Schedule Description"
-              size="small"
-              fullWidth
-            />
-          </Stack>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Stack direction="column" spacing={2}>
+              <TextField
+                name="name"
+                label="Schedule Name"
+                size="small"
+                autoFocus
+              />
+              <TextField
+                name="description"
+                label="Schedule Description"
+                size="small"
+                fullWidth
+                multiline
+              />
+            </Stack>
+          </Grid>
 
-          <Stack
-            direction="column"
-            alignItems="center"
-            justifyContent="space-between"
-            mt={1}
-          >
+          <Grid item xs={4}>
             <Stack direction="column" alignItems="center">
               <FormLabel>Choose Color:</FormLabel>
 
@@ -114,35 +113,39 @@ const ScheduleForm = ({
               />
             </Stack>
 
-            <FormLabel>Type of schedule:</FormLabel>
-            <RadioGroup {...getFieldProps("type")} row>
-              <FormControlLabel
-                value="boolean"
-                control={<Radio />}
-                label="boolean"
-              />
-              <FormControlLabel
-                value="range"
-                control={<Radio />}
-                label="range"
-              />
-            </RadioGroup>
-          </Stack>
-        </Stack>
+            <Stack direction="column" alignItems="center">
+              <FormLabel>Type of schedule:</FormLabel>
+              <RadioGroup {...getFieldProps("type")} row>
+                <FormControlLabel
+                  value="boolean"
+                  control={<Radio />}
+                  label="boolean"
+                />
+                <FormControlLabel
+                  value="range"
+                  control={<Radio />}
+                  label="range"
+                />
+              </RadioGroup>
+            </Stack>
+          </Grid>
 
-        <Stack direction="row" spacing={2}>
-          <Button
-            disabled={!isValid && !dirty}
-            type="submit"
-            variant="contained"
-          >
-            Save
-          </Button>
+          <Grid item xs={4}>
+            <Stack direction="row" spacing={2}>
+              <Button
+                disabled={!isValid || !dirty}
+                type="submit"
+                variant="contained"
+              >
+                Save
+              </Button>
 
-          <Button onClick={onClose} color="error" variant="contained">
-            Close Form
-          </Button>
-        </Stack>
+              <Button onClick={onClose} color="error" variant="contained">
+                Close Form
+              </Button>
+            </Stack>
+          </Grid>
+        </Grid>
       </Form>
     </FormikProvider>
   );
