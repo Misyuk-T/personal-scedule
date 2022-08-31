@@ -10,3 +10,4 @@ export { ModalAddForm } from "./ModalAddForm";
 export { ScheduleList } from "./ScheduleList";
 export { ScheduleForm } from "./ScheduleForm";
 export { ConfirmationModal } from "./ConfirmationModal";
+export { ScheduleCheckboxForm } from "./ScheduleCheckboxForm";

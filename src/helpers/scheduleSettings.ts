@@ -27,5 +27,3 @@ export const SCHEDULE_DEFAULT_STYLE = {
     },
   },
 };
-
-export const BOTTOM_COLOR = "rgba(0, 150, 136, 0.04)";

@@ -15,5 +15,5 @@ export interface TimeTableCellProps {
   hasRightBorder?: boolean;
   endOfGroup?: boolean;
   isShaded?: boolean;
-  onDoubleClick?: (e: any) => void;
+  onDoubleClick?: (e: Event) => void;
 }

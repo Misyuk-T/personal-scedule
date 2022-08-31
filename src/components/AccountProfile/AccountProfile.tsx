@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFormik, Form, FormikProvider, FormikValues } from "formik";
+import { useFormik, Form, FormikProvider } from "formik";
 import {
   Stack,
   Button,
@@ -10,14 +10,13 @@ import {
   Grid,
 } from "@mui/material";
 
-import { TextField } from "../TextField";
-import { Alert } from "../Alert";
+import { TextField, Alert } from "components";
 
 import { useTypedDispatch } from "redux/store";
 import { updateUser } from "actions/user";
 import { UPDATE_DATA } from "helpers/constants";
 import { accountProfileSchema } from "helpers/validationShemes";
-import { User } from "types/user";
+import { User, UserInformation } from "types/user";
 
 interface AccountProfileDetailsProps {
   userInformation: User;
@@ -33,7 +32,7 @@ export const AccountProfileDetails = ({
     setShowAlert((prevState) => !prevState);
   };
 
-  const handleSubmit = (values: FormikValues) => {
+  const handleSubmit = (values: UserInformation) => {
     dispatch(updateUser(userInformation.id, values));
     toggleAlert();
   };

@@ -13,7 +13,7 @@ import {
   Link,
 } from "@mui/material";
 
-import { Alert } from "../Alert";
+import { Alert } from "components";
 
 import { useTypedDispatch, useTypedSelector } from "redux/store";
 import { updateUser, uploadMedia } from "actions/user";
@@ -31,7 +31,7 @@ export const AccountInformation = ({
   const dispatch = useTypedDispatch();
   const { isLoading } = useTypedSelector((state) => state.user);
 
-  const [media, setMedia] = useState<File | undefined>();
+  const [media, setMedia] = useState<File>();
   const [localUrl, setLocalUrl] = useState<string>("");
   const [showAlert, setShowAlert] = useState<boolean>(false);
 

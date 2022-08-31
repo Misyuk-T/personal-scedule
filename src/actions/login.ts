@@ -6,6 +6,7 @@ import {
   getAuth,
   signOut,
   onAuthStateChanged,
+  User,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -17,19 +18,19 @@ import {
   collection,
   doc,
 } from "firebase/firestore";
-import { AppThunk } from "../redux/store";
+
+import { AppThunk } from "redux/store";
 import { logout, login, setAuthObserve } from "redux/reducers/userSlice";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDUC7p7k8LbJy1oHAoJqJIz9CqtNCup2ow",
-  authDomain: "personal-mood-schedule.firebaseapp.com",
-  databaseURL:
-    "https://personal-mood-schedule-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "personal-mood-schedule",
-  storageBucket: "personal-mood-schedule.appspot.com",
-  messagingSenderId: "858168747701",
-  appId: "1:858168747701:web:a7e7a1889799c82774c0fc",
-  measurementId: "G-7L0227RQNE",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_API_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 initializeApp(firebaseConfig);
@@ -46,7 +47,7 @@ export const openLoginPopup = async () => {
 };
 
 const loginUser =
-  (googleUserData: any): AppThunk =>
+  (googleUserData: User): AppThunk =>
   async (dispatch) => {
     dispatch(setAuthObserve(true));
 

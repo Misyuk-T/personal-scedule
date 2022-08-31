@@ -1,6 +1,8 @@
 import { FormikValues } from "formik";
+import { compareAsc } from "date-fns";
 import _flattenDeep from "lodash.flattendeep";
 
+import { Time } from "lightweight-charts";
 import { Schedule, ScheduleData, ScheduleId } from "types/schedule";
 
 export const toEventTitle = (value: number | boolean): string => {
@@ -60,4 +62,21 @@ export const toResourcesScheduleData = (schedules: Schedule[]) => {
       }),
     },
   ];
+};
+
+export const toChartsData = (scheduleData: ScheduleData[]) => {
+  const formattedData = scheduleData.map(({ startDate, value }) => {
+    const isBooleanValue = typeof value === "boolean";
+    const formattedBooleanValue = value ? 1 : 0;
+    const timestamp = startDate / 1000;
+
+    return {
+      time: timestamp as Time,
+      value: isBooleanValue ? formattedBooleanValue : value,
+    };
+  });
+
+  return formattedData.sort((a, b) => {
+    return compareAsc(+a.time, +b.time);
+  });
 };

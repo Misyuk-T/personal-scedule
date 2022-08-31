@@ -27,7 +27,7 @@ import { Schedule, ScheduleData, ScheduleId } from "types/schedule";
 const db = getFirestore();
 
 export const addSchedule =
-  (userId: string, schedule: any): AppThunk =>
+  (userId: string, schedule: Schedule): AppThunk =>
   async (dispatch) => {
     const scheduleRef = doc(collection(db, "schedules"));
     const scheduleId = scheduleRef.id;

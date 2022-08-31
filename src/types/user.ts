@@ -10,10 +10,14 @@ export type UserName = {
   name: string;
 };
 
-export interface User extends UserId, UserName, OwnerId {
+export interface UserInformation extends UserName {
+  name: string;
   email: string;
-  photo: string;
-  statement?: string;
   website?: string;
+  statement?: string;
+}
+
+export interface User extends UserId, OwnerId, UserInformation {
+  photo: string;
   schedules: string[];
 }
