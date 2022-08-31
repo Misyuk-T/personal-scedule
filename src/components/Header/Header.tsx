@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -16,14 +16,20 @@ import {
 import { useTypedDispatch, useTypedSelector } from "redux/store";
 import { logoutUser, observeAuth, openLoginPopup } from "actions/login";
 import { observeSchedules } from "actions/schedule";
+import _get from "lodash.get";
+
 import logo from "assets/logo.png";
 
-const pages = ["schedule", "calendar"];
+const pages = ["calendar", "schedule"];
 
 const Header = () => {
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const { user, isAuthorized } = useTypedSelector((state) => state.user);
   const dispatch = useTypedDispatch();
+
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -36,6 +42,11 @@ const Header = () => {
   useEffect(() => {
     dispatch(observeAuth());
   }, [dispatch]);
+
+  useEffect(() => {
+    const origin = _get(location, "state.from.pathname", "/");
+    location !== origin && navigate(origin);
+  }, [isAuthorized]);
 
   useEffect(() => {
     if (user.schedules) {

@@ -8,10 +8,11 @@ import {
 import { CssBaseline, Container } from "@mui/material";
 
 import { Header, PrivateRoute, PageLoader } from "./components";
-import Profile from "./pages/Profile";
-import store from "./redux/store";
 import Schedules from "./pages/Schedules";
 import Calendar from "./pages/Calendar";
+import Profile from "./pages/Profile";
+
+import store from "./redux/store";
 
 const App = () => {
   return (
