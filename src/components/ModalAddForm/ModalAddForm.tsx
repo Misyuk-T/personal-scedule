@@ -60,7 +60,7 @@ const ModalAddForm = ({
     },
   });
 
-  const { getFieldProps } = formik;
+  const { getFieldProps, values } = formik;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -87,6 +87,7 @@ const ModalAddForm = ({
                   <Stack direction="column">
                     {schedules.map((item) => {
                       const isBooleanType = item.type === "boolean";
+                      const rangeFieldValue = values[item.id] + "0%";
 
                       return (
                         <Stack key={item.id}>
@@ -101,7 +102,7 @@ const ModalAddForm = ({
                             </Stack>
                           ) : (
                             <Stack>
-                              Select amount of range:{" "}
+                              Select amount of range: {rangeFieldValue}
                               <Slider
                                 step={1}
                                 marks

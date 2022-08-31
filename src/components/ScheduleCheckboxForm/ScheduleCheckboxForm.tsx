@@ -1,10 +1,10 @@
 import { ChangeEvent, useState } from "react";
 import {
   FormControl,
-  FormLabel,
   FormGroup,
   Checkbox,
   FormControlLabel,
+  Stack,
 } from "@mui/material";
 
 import { Schedule, ScheduleId } from "types/schedule";
@@ -40,27 +40,28 @@ const ScheduleCheckboxForm = ({
     activeSchedules.some((item) => item.id === itemId);
 
   return (
-    <FormControl component="fieldset" sx={{ m: 3 }} variant="standard">
-      <FormLabel component="legend">Select schedules</FormLabel>
+    <FormControl component="fieldset" variant="standard">
       <FormGroup>
-        {schedules.map(({ id, name, color }) => {
-          const isChecked = getChecked(id);
+        <Stack direction="row">
+          {schedules.map(({ id, name, color }) => {
+            const isChecked = getChecked(id);
 
-          return (
-            <FormControlLabel
-              key={id}
-              control={
-                <Checkbox
-                  checked={isChecked}
-                  onChange={handleChange}
-                  name={id}
-                />
-              }
-              label={name}
-              sx={{ color: color }}
-            />
-          );
-        })}
+            return (
+              <FormControlLabel
+                key={id}
+                control={
+                  <Checkbox
+                    checked={isChecked}
+                    onChange={handleChange}
+                    name={id}
+                  />
+                }
+                label={name}
+                sx={{ color: color }}
+              />
+            );
+          })}
+        </Stack>
       </FormGroup>
     </FormControl>
   );
